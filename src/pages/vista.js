@@ -1,6 +1,7 @@
 import React from "react"
 import {io} from "socket.io-client"
 import css from "../assets/index.css"
+import Socket from "../components/Socket";
 
 class Vista extends React.Component {
 
@@ -20,22 +21,7 @@ class Vista extends React.Component {
             // console.log(Vista.socket.id);
         });
 
-        Vista.socket.on('dibujar', data =>{
-            let line = data.line;
-            var canvas = document.getElementById('canvas')
-
-
-            var context = canvas.getContext('2d');
-
-            console.log('recibiendo del Servidor: ', data.line)
-
-            context.beginPath();
-            context.lineWidth = 2;
-            context.moveTo(line[0].x * window.innerWidth, line[0].y * window.innerHeight);
-            context.lineTo(line[1].x * window.innerWidth, line[1].y * window.innerHeight);
-            context.stroke();
-
-        })
+        new Socket(Vista.socket).dibujar();
     };
 
     cambiarClick (e) {
@@ -56,22 +42,25 @@ class Vista extends React.Component {
         }
         Vista.mouse.postpre = {x: Vista.mouse.post.x, y:Vista.mouse.post.y}
 
-        Vista.socket.on('dibujar', data =>{
-            let line = data.line;
-            var canvas = document.getElementById('canvas')
 
+        new Socket(Vista.socket).dibujar();
 
-                var context = canvas.getContext('2d');
-
-                // console.log('recibiendo del Servidor: ', data.line)
-
-                context.beginPath();
-                context.lineWidth = 2;
-                context.moveTo(line[0].x * window.innerWidth, line[0].y * window.innerHeight);
-                context.lineTo(line[1].x * window.innerWidth, line[1].y * window.innerHeight);
-                context.stroke();
-
-        })
+        // Vista.socket.on('dibujar', data =>{
+        //     let line = data.line;
+        //     var canvas = document.getElementById('canvas')
+        //
+        //
+        //         var context = canvas.getContext('2d');
+        //
+        //         // console.log('recibiendo del Servidor: ', data.line)
+        //
+        //         context.beginPath();
+        //         context.lineWidth = 2;
+        //         context.moveTo(line[0].x * window.innerWidth, line[0].y * window.innerHeight);
+        //         context.lineTo(line[1].x * window.innerWidth, line[1].y * window.innerHeight);
+        //         context.stroke();
+        //
+        // })
 
     }
 
@@ -85,8 +74,8 @@ class Vista extends React.Component {
         return(
             <canvas
                 id='canvas'
-                width='3000'
-                height='2500'
+                width='720'
+                height='540'
                 onMouseDown={this.cambiarClick}
                 onMouseMove={this.cambiarMove}
                 onMouseUp={this.cambiarClick2}
